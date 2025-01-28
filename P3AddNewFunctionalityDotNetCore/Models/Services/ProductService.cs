@@ -129,7 +129,8 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         public void DeleteProduct(int id)
         {  //SignalAir
            //Autres solutions 
-            // TODO what happens if a product has been added to a cart and has been later removed from the inventory ?
+            // TODO what happens if a product
+            // has been added to a cart and has been later removed from the inventory ?
             // delete the product from the cart by using the specific method
             // => the choice is up to the student
             _cart.RemoveLine(GetProductById(id));
