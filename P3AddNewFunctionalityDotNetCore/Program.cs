@@ -11,12 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using P3AddNewFunctionalityDotNetCore;
 using System.Linq;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSignalR();
 builder.Services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
 builder.Services.AddSingleton<ICart, Cart>();
 builder.Services.AddSingleton<ILanguageService, LanguageService>();
@@ -61,6 +62,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 
 var supportedCultures = new[] { "en-GB", "en-US", "en", "fr-FR", "fr" };
 var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])

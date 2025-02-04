@@ -8,33 +8,25 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Moq;
-using P3AddNewFunctionalityDotNetCore.Controllers;
-using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
-using P3AddNewFunctionalityDotNetCore.Models.Services;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using Xunit;
-using P3AddNewFunctionalityDotNetCore.Data;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using P3AddNewFunctionalityDotNetCore.Models;
 using P3AddNewFunctionalityDotNetCore.Resources.Models.Services;
 using ProductService = P3AddNewFunctionalityDotNetCore.Models.Services.ProductService;
 
+
+
 namespace P3AddNewFunctionalityDotNetCore.Tests
 {
-
     public class ProductServiceTests
     {
-
-
-        //Test unitaires
         public class ProductViewModelValidationTest
         {
             private readonly Mock<Models.Services.ProductService> mockProductService;
             private readonly ProductViewModel product;
             Models.Services.ProductService productService = new Models.Services.ProductService(It.IsAny<ICart>(), It.IsAny<IProductRepository>(), It.IsAny<IOrderRepository>(), It.IsAny<IStringLocalizer<Models.Services.ProductService>>());
-
 
 
             public ProductViewModelValidationTest()
@@ -46,7 +38,6 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
 
             }
 
-
             [Fact]
             public void TestMissingName()
             {
@@ -57,6 +48,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Assert.True(result.Any());
                 Assert.Equal(result.FirstOrDefault(), "Veuillez saisir un nom");
             }
+           
             [Fact]
             public void TestMissingPrice()
             {
@@ -67,6 +59,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Assert.True(result.Any());
                 Assert.Equal(result.FirstOrDefault(), "Veuillez saisir un prix");
             }
+            
             [Fact]
             public void TestMissingStock()
             {
@@ -78,6 +71,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Assert.Equal(result.FirstOrDefault(), "Veuillez saisir un stock");
             }
 
+            
             [Fact]
             public void TestPriceNotANumber()
             {
@@ -109,6 +103,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Assert.True(result.Any());
                 Assert.Equal(result.FirstOrDefault(), "La valeur saisie pour le stock doit être un entier");
             }
+         
             [Fact]
             public void TestQuantityNotGreaterThanZero()
             {
@@ -124,13 +119,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
 
             private List<string> ValidModel(ProductViewModel model)
             {
-
                 return productService.ValidateModel(model);
-
-
             }
-
-
 
         }
     }

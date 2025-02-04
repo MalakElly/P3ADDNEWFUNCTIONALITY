@@ -21,7 +21,7 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
         }
 
         public ViewResult Index()
-        {
+        {   
             return View(new OrderViewModel());
         }
 
