@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
 using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
@@ -17,14 +18,16 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         private readonly IProductRepository _productRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IStringLocalizer<ProductService> _localizer;
+        private readonly IHubContext<CartHub> _hubContext;
 
         public ProductService(ICart cart, IProductRepository productRepository,
-            IOrderRepository orderRepository, IStringLocalizer<ProductService> localizer)
+            IOrderRepository orderRepository, IStringLocalizer<ProductService> localizer,IHubContext<CartHub> hubContext)
         {
             _cart = cart;
             _productRepository = productRepository;
             _orderRepository = orderRepository;
             _localizer = localizer;
+            _hubContext = hubContext;
         }
         public List<ProductViewModel> GetAllProductsViewModel()
         {
@@ -129,10 +132,25 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         public void DeleteProduct(int id)
         {  //SignalAir
            //Autres solutions 
-            // TODO what happens if a product
-            // has been added to a cart and has been later removed from the inventory ?
-            // delete the product from the cart by using the specific method
-            // => the choice is up to the student
+           // TODO what happens if a product
+           // has been added to a cart and has been later removed from the inventory ?
+           // delete the product from the cart by using the specific method
+           // => the choice is up to the student
+
+
+            //var product = GetProductById(id);
+
+            //if (product != null)
+            //{
+            //    _productRepository.DeleteProduct(id);
+
+            //    // Notifier les clients via SignalR
+            //    _hubContext.Clients.All.SendAsync("ProductUnavailable", id);
+            //}
+            //else
+            //{
+            //    throw new ArgumentException("Produit introuvable !");
+            //}
             _cart.RemoveLine(GetProductById(id));
 
             _productRepository.DeleteProduct(id);

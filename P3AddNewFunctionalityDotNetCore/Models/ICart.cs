@@ -9,6 +9,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models
 
         void RemoveLine(Product product);
 
+        
         void Clear();
 
         double GetTotalValue();

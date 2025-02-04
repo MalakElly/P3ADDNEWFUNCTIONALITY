@@ -62,6 +62,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.MapHub<CartHub>("/carthub");
 
 
 var supportedCultures = new[] { "en-GB", "en-US", "en", "fr-FR", "fr" };

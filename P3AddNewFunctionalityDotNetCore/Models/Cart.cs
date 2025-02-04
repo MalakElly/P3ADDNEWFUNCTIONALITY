@@ -26,6 +26,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models
                 line.Quantity += quantity;
             }
         }
+   
 
         public void RemoveLine(Product product) => _cartLines.RemoveAll(l => l.Product.Id == product.Id);
 
@@ -49,5 +50,6 @@ namespace P3AddNewFunctionalityDotNetCore.Models
         public int OrderLineId { get; set; }
         public Product Product { get; set; }
         public int Quantity { get; set; }
+        public bool IsAvailable { get; set; } = true;
     }
 }

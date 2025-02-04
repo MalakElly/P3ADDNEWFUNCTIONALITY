@@ -44,7 +44,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
             product.Quantity = product.Quantity - quantityToRemove;
 
             if (product.Quantity == 0)
-                _context.Product.Remove(product);
+                DeleteProduct(product.Id);
             else
             {
                 _context.Product.Update(product);

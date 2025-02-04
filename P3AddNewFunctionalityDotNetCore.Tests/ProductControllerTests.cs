@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 using ProductService = P3AddNewFunctionalityDotNetCore.Models.Services.ProductService;
+using Microsoft.AspNetCore.SignalR;
 
 namespace P3AddNewFunctionalityDotNetCore.Tests
 {
@@ -36,7 +37,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             ProductService productService = new ProductService(It.IsAny<ICart>(),
                                                     productRepository,
                                                     It.IsAny<IOrderRepository>(),
-                                                    It.IsAny<IStringLocalizer<Models.Services.ProductService>>());
+                                                    It.IsAny<IStringLocalizer<Models.Services.ProductService>>(),It.IsAny(IHubContext()));
             var controller = new ProductController(productService, null);
 
             var newProduct = new ProductViewModel
