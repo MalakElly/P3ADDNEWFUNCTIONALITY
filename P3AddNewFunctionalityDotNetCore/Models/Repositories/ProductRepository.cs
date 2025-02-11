@@ -9,23 +9,28 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
 {
     public class ProductRepository : IProductRepository
     {
+        
         private static P3Referential _context;
 
         public ProductRepository(P3Referential context)
         {
                 _context = context;
         }
+        
         public async Task<Product> GetProduct(int id)
         {
             var product = await _context.Product.SingleOrDefaultAsync(m => m.Id == id);
             return product;
         }
 
+        
         public async Task<IList<Product>> GetProduct()
         {
             var products = await _context.Product.ToListAsync();
             return products;
         }
+        
+        
         /// <summary>
         /// Get all products from the inventory
         /// </summary>
@@ -34,6 +39,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
             IEnumerable<Product> productEntities= _context.Product.Where(p => p.Id > 0);
             return productEntities.ToList();
         }
+
 
         /// <summary>
         /// Update the stock of a product by its id
@@ -45,19 +51,18 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
 
             if (product.Quantity == 0)
                 DeleteProduct(product.Id);
+
             else
             {
                 _context.Product.Update(product);
                 _context.SaveChanges();
-            }   
+            }
         }
 
         public void SaveProduct(Product product)
         {
             if (product != null)
             {
-               
-
                 _context.Product.Add(product);
                 _context.SaveChanges();
             }
@@ -74,5 +79,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
                 _context.SaveChanges();
             }
         }
+
+
     }
 }

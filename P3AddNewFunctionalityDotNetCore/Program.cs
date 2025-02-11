@@ -62,7 +62,6 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.MapHub<CartHub>("/carthub");
 
 
 var supportedCultures = new[] { "en-GB", "en-US", "en", "fr-FR", "fr" };
@@ -82,6 +81,13 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Product}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<CartHub>("/carthub"); 
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Product}/{action=Index}/{id?}");
+});
 await IdentitySeedData.EnsurePopulated(app);
 
 app.Run();

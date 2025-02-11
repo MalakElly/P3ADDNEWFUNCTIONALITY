@@ -1,5 +1,6 @@
 ﻿
 using P3AddNewFunctionalityDotNetCore.Models.Entities;
+using System.Collections.Generic;
 
 namespace P3AddNewFunctionalityDotNetCore.Models
 {
@@ -15,5 +16,6 @@ namespace P3AddNewFunctionalityDotNetCore.Models
         double GetTotalValue();
 
         double GetAverageValue();
+   
     }
 }

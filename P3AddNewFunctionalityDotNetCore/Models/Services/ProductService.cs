@@ -138,22 +138,21 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
            // => the choice is up to the student
 
 
-            //var product = GetProductById(id);
+            var product = GetProductById(id);
 
-            //if (product != null)
-            //{
-            //    _productRepository.DeleteProduct(id);
+            if (product != null)
+            {
+                _cart.RemoveLine(GetProductById(id));
 
-            //    // Notifier les clients via SignalR
-            //    _hubContext.Clients.All.SendAsync("ProductUnavailable", id);
-            //}
-            //else
-            //{
-            //    throw new ArgumentException("Produit introuvable !");
-            //}
-            _cart.RemoveLine(GetProductById(id));
-
-            _productRepository.DeleteProduct(id);
+                _productRepository.DeleteProduct(id);
+                // Notifier les clients via SignalR
+                _hubContext.Clients.All.SendAsync("ProductUnavailable", id);
+            }
+            else
+            {
+                throw new ArgumentException("Produit introuvable !");
+            }
+          
         }
     }
 }

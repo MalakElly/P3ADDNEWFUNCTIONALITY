@@ -47,11 +47,7 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
                 return RedirectToAction("Admin");
             }
                 
-           
-         
-                
-            
-        }
+         }
 
         [Authorize]
         [HttpPost]

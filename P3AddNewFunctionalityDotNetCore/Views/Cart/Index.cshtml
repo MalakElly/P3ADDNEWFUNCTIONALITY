@@ -1,4 +1,42 @@
 ﻿@model P3AddNewFunctionalityDotNetCore.Models.Cart
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/carthub")
+            .build();
+
+        connection.start()
+            .then(() => console.log("SignalR connecté avec succès"))
+            .catch(err => console.error("❌ SignalR échec de connexion: ", err));
+
+        connection.on("ProductUnavailable", function (productId) {
+            console.log("Notification reçue - Produit en rupture:", productId);
+
+            // Vérifie si l'élément avec le bon productId existe bien
+            var row = document.querySelector(`tr[data-product-id="${productId}"]`);
+            // var price = document.querySelector(`td[data-product-Price="${productPrice}"]`);
+          
+            if (row) {
+                console.log(" Produit trouvé dans le panier, mise à jour en cours...");
+
+                // Ajoute la classe CSS pour griser la ligne
+                row.style.backgroundColor = "#ffcccc"; 
+                row.style.opacity = "0.5"; 
+
+
+                // Ajout d'un message d'alerte sous le produit
+                var messageRow = document.querySelector(`td[data-product-Quantity="${productQuantity}"]`);
+                messageRow.innerHTML = `<span>⚠ Ce produit  n'est plus en stock !</span>`;
+                row.after(messageRow);
+            } else {
+                console.error("⚠ Erreur : Impossible de trouver l'élément tr[data-product-id='" + productId + "']");
+            }
+        });
+    });
+</script>
+
+
 
 <h2>@Localizer["YourCart"]</h2>
 <table class="table table-bordered table-striped">
@@ -13,17 +51,16 @@
     <tbody>
         @foreach (var line in Model.Lines)
         {
-            <tr>
-                <td class="text-center">@line.Quantity</td>
+            <tr data-product-id="@line.Product.Id">
+                <td data-product-Quantity="@line.Product.Quantity" class="text-center">@line.Quantity</td>
                 <td class="text-start">@line.Product.Name</td>
-                <td class="text-end">@line.Product.Price.ToString("c")</td>
+                <td data-product-Price="@line.Product.Price" class="text-end">@line.Product.Price.ToString("c")</td>
                 <td class="text-end">
                     @((line.Quantity * line.Product.Price).ToString("c"))
                 </td>
                 <td>
                     <form asp-action="RemoveFromCart" method="post">
-                        <input type="hidden" name="id"
-                               value="@line.Product.Id" />
+                        <input type="hidden" name="id" value="@line.Product.Id" />
                         <button type="submit" class="btn btn-sm btn-danger">
                             @Localizer["Remove"]
                         </button>
@@ -35,7 +72,7 @@
     <tfoot>
         <tr>
             <td colspan="3" class="text-end">@Localizer["Total"]:</td>
-            <td class="text-end">
+            <td class="text-end" id="cartTotal">
                 @Model.GetTotalValue().ToString("c")
             </td>
         </tr>
