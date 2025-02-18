@@ -26,7 +26,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         {
             private readonly Mock<Models.Services.ProductService> mockProductService;
             private readonly ProductViewModel product;
-            Models.Services.ProductService productService = new Models.Services.ProductService(It.IsAny<ICart>(), It.IsAny<IProductRepository>(), It.IsAny<IOrderRepository>(), It.IsAny<IStringLocalizer<Models.Services.ProductService>>());
+            Models.Services.ProductService productService = new Models.Services.ProductService(It.IsAny<ICart>(), It.IsAny<IProductRepository>(), It.IsAny<IOrderRepository>(), It.IsAny<IStringLocalizer<Models.Services.ProductService>>(),It.IsAny<Microsoft.AspNetCore.SignalR.IHubContext<CartHub>>());
 
 
             public ProductViewModelValidationTest()
