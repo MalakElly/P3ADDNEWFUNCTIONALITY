@@ -7,34 +7,65 @@
             .build();
 
         connection.start()
-            .then(() => console.log("SignalR connecté avec succès"))
+            .then(() => console.log("✅ SignalR connecté avec succès"))
             .catch(err => console.error("❌ SignalR échec de connexion: ", err));
 
         connection.on("ProductUnavailable", function (productId) {
-            console.log("Notification reçue - Produit en rupture:", productId);
+            console.log("🔴 Notification reçue - Produit en rupture:", productId);
 
             // Vérifie si l'élément avec le bon productId existe bien
             var row = document.querySelector(`tr[data-product-id="${productId}"]`);
-            // var price = document.querySelector(`td[data-product-Price="${productPrice}"]`);
-          
             if (row) {
-                console.log(" Produit trouvé dans le panier, mise à jour en cours...");
+                console.log("✅ Produit trouvé dans le panier, mise à jour en cours...");
 
-                // Ajoute la classe CSS pour griser la ligne
-                row.style.backgroundColor = "#ffcccc"; 
-                row.style.opacity = "0.5"; 
+                // Ajoute un style pour indiquer que le produit n'est plus disponible
+                row.style.backgroundColor = "#ffcccc"; // Rouge clair
+                row.style.opacity = "0.5"; // Rendre la ligne semi-transparente
 
+                // Désactiver le bouton "Supprimer"
+                var removeButton = row.querySelector("button.btn-danger");
+                if (removeButton) {
+                    removeButton.disabled = true;
+                    removeButton.innerText = "Indisponible";
+                }
 
-                // Ajout d'un message d'alerte sous le produit
-                var messageRow = document.querySelector(`td[data-product-Quantity="${productQuantity}"]`);
-                messageRow.innerHTML = `<span>⚠ Ce produit  n'est plus en stock !</span>`;
+                // Ajouter un message sous le produit
+                var messageRow = document.createElement("tr");
+                messageRow.innerHTML = `<td colspan="5" class="text-center text-danger">
+                        ⚠ Le produit <strong>${row.querySelector('.text-start').innerText}</strong> n'est plus en stock !
+                    </td>`;
                 row.after(messageRow);
+
+                // Met à jour le total et la moyenne du panier
+                updateCartTotals();
             } else {
                 console.error("⚠ Erreur : Impossible de trouver l'élément tr[data-product-id='" + productId + "']");
             }
         });
+
+        // Fonction pour recalculer le total et la moyenne
+        function updateCartTotals() {
+            let total = 0;
+            let itemCount = 0;
+
+            document.querySelectorAll("tbody tr[data-product-id]").forEach(row => {
+                if (!row.style.backgroundColor) { // Exclut les produits supprimés
+                    let priceText = row.querySelector("td:nth-child(4)").innerText;
+                    let price = parseFloat(priceText.replace(/[^0-9,.-]/g, '').replace(',', '.')); // Convertir en nombre
+                    total += price;
+                    itemCount++;
+                }
+            });
+
+            let average = itemCount > 0 ? (total / itemCount).toFixed(2) : "0.00";
+
+            // Met à jour les éléments HTML
+            document.querySelector("#cartTotal").innerText = total.toFixed(2) + " €";
+            document.querySelector("#cartAverage").innerText = total.toFixed(2) + " €";
+        }
     });
 </script>
+
 
 
 
@@ -52,7 +83,7 @@
         @foreach (var line in Model.Lines)
         {
             <tr data-product-id="@line.Product.Id">
-                <td data-product-Quantity="@line.Product.Quantity" class="text-center">@line.Quantity</td>
+                <td data-product-Quantity="@line.Quantity" class="text-center">@line.Quantity</td>
                 <td class="text-start">@line.Product.Name</td>
                 <td data-product-Price="@line.Product.Price" class="text-end">@line.Product.Price.ToString("c")</td>
                 <td class="text-end">
@@ -78,7 +109,7 @@
         </tr>
         <tr>
             <td colspan="3" class="text-end">@Localizer["Average"]:</td>
-            <td class="text-end">
+            <td class="text-end" id="cartAverage">
                 @Model.GetAverageValue().ToString("c")
             </td>
         </tr>

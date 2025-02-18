@@ -37,7 +37,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             ProductService productService = new ProductService(It.IsAny<ICart>(),
                                                     productRepository,
                                                     It.IsAny<IOrderRepository>(),
-                                                    It.IsAny<IStringLocalizer<Models.Services.ProductService>>(),It.IsAny(IHubContext()));
+                                                    It.IsAny<IStringLocalizer<Models.Services.ProductService>>(),It.IsAny<IHubContext<CartHub>>());
             var controller = new ProductController(productService, null);
 
             var newProduct = new ProductViewModel
@@ -83,7 +83,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             ProductService productService = new ProductService(cart,
                                                            productRepository,
                                                            It.IsAny<IOrderRepository>(),
-                                                           It.IsAny<IStringLocalizer<Models.Services.ProductService>>());
+                                                           It.IsAny<IStringLocalizer<Models.Services.ProductService>>(),It.IsAny<IHubContext<CartHub>>());
             var controller = new ProductController(productService, null);
 
             // Créer un produit à supprimer
