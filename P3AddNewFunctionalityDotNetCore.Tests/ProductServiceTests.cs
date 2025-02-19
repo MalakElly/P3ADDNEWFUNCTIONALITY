@@ -70,8 +70,18 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Assert.True(result.Any());
                 Assert.Equal(result.FirstOrDefault(), "Veuillez saisir un stock");
             }
+            [Fact]
+            public void TestPriceIsADOUBLE()
+            {
+                product.Name = "Test Product";
+                product.Price = "20.1"; 
+                product.Stock = "3";
+                var result = ValidModel(product);
+                Assert.False(result.Any());
+               
+            }
 
-            
+
             [Fact]
             public void TestPriceNotANumber()
             {
